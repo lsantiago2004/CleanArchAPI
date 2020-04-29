@@ -8,12 +8,12 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Sheev.Common.BaseModels;
 using Sheev.Common.Logger;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     [Route("v2/External")]
     [ApiController]
@@ -92,14 +92,14 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpGet("Missing/{systemId}/{tableName}")]
         [AuthorizeClaim("External Id", K2SO.Auth.Constants.PermissionAccessType.VIEW)]
-        public async Task<Tagge.Common.Models.ProductCategoryResponse> GetMissing(string systemId, string tableName)
+        public async Task<Product.Common.Models.ProductCategoryResponse> GetMissing(string systemId, string tableName)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             //trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(trackingGuid, _context);
 
             //long longId = Utilities.RestErrorHandler.CheckId(id, _context, (Guid)trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductCategoryResponse();
+            var response = new Product.Common.Models.ProductCategoryResponse();
             //response = await KitModel.GetById(longId, _context, (Guid)trackingGuid);
 
             return response;
@@ -151,7 +151,7 @@ namespace Tagge.Controllers
         [HttpPost("UpdateExternalId")]
         [AuthorizeClaim("External Id", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.ExternalIdResponse> UpdateExternalId([FromBody]Tagge.Common.Models.ExternalIdRequest request)
+        public async Task<Product.Common.Models.ExternalIdResponse> UpdateExternalId([FromBody]Product.Common.Models.ExternalIdRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -163,7 +163,7 @@ namespace Tagge.Controllers
 
             Utilities.RestErrorHandler.CheckExternalIdRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.ExternalIdResponse();
+            var response = new Product.Common.Models.ExternalIdResponse();
             response = await _externalIdModel.Update(request, (Guid)trackingGuid);
 
             return response;
@@ -182,7 +182,7 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpDelete("")]
         [AuthorizeClaim("External Id", K2SO.Auth.Constants.PermissionAccessType.DELETE)]
-        public async Task<NoContentResult> DeleteExternalId(Tagge.Common.Models.ExternalIdRequest request)
+        public async Task<NoContentResult> DeleteExternalId(Product.Common.Models.ExternalIdRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();

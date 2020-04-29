@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Sheev.Common.Logger;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     [Route("v2/Catalog")]
     [ApiController]
@@ -40,14 +40,14 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpGet("ProductCategory/{id}")]
         [AuthorizeClaim("Product Category", K2SO.Auth.Constants.PermissionAccessType.VIEW)]
-        public async Task<Tagge.Common.Models.ProductCategoryResponse> GetProductCategory(string id, [FromQuery] Guid? trackingGuid = null)
+        public async Task<Product.Common.Models.ProductCategoryResponse> GetProductCategory(string id, [FromQuery] Guid? trackingGuid = null)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(trackingGuid, _context);
 
             Utilities.RestErrorHandler.CheckId(id, 2, _context, (Guid)trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductCategoryResponse();
+            var response = new Product.Common.Models.ProductCategoryResponse();
             response = await _categoryAssignment.GetById(_context, id, "PC_Product", (Guid)trackingGuid);
 
             return response;
@@ -62,7 +62,7 @@ namespace Tagge.Controllers
         [HttpPost("ProductCategory")]
         [AuthorizeClaim("Product Category", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.ProductCategoryResponse> PostProductCategory([FromBody]Tagge.Common.Models.ProductCategoryRequest request)
+        public async Task<Product.Common.Models.ProductCategoryResponse> PostProductCategory([FromBody]Product.Common.Models.ProductCategoryRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -74,7 +74,7 @@ namespace Tagge.Controllers
 
             //Utilities.RestErrorHandler.CheckKitRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductCategoryResponse();
+            var response = new Product.Common.Models.ProductCategoryResponse();
             response = await _categoryAssignment.Save(_context, request, "PC_Product", trackingGuid);
 
             return response;

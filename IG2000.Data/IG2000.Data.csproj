@@ -4,4 +4,15 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\K2SO.Auth\K2SO.Auth.csproj" />
+    <ProjectReference Include="..\LT319.Common\LT319.Common.csproj" />
+    <ProjectReference Include="..\Sheev.Common\Sheev.Common.csproj" />
+  </ItemGroup>
+
 </Project>

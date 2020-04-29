@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Sheev.Common.Logger;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     [Route("v2")]
     [ApiController]
@@ -53,7 +53,7 @@ namespace Tagge.Controllers
         [HttpPost("CustomField/Catalog")]
         [AuthorizeClaim("Product Custom Field", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.GenericCustomFieldResponse> PostCatalogCustomField([FromBody]Tagge.Common.Models.GenericCustomFieldRequest request)
+        public async Task<Product.Common.Models.GenericCustomFieldResponse> PostCatalogCustomField([FromBody]Product.Common.Models.GenericCustomFieldRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -63,7 +63,7 @@ namespace Tagge.Controllers
 
             Utilities.RestErrorHandler.CheckGenericCustomFieldRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.GenericCustomFieldResponse();
+            var response = new Product.Common.Models.GenericCustomFieldResponse();
             response = await _customFieldModel.Save(request, trackingGuid);
 
             return response;
@@ -80,7 +80,7 @@ namespace Tagge.Controllers
         [HttpPut("CustomField/Catalog/{id}")]
         [AuthorizeClaim("Product Custom Field", K2SO.Auth.Constants.PermissionAccessType.EDIT)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.GenericCustomFieldResponse> PutCatalogCustomField(string id, [FromBody]Tagge.Common.Models.GenericCustomFieldRequest request)
+        public async Task<Product.Common.Models.GenericCustomFieldResponse> PutCatalogCustomField(string id, [FromBody]Product.Common.Models.GenericCustomFieldRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -92,7 +92,7 @@ namespace Tagge.Controllers
 
             Utilities.RestErrorHandler.CheckGenericCustomFieldRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.GenericCustomFieldResponse();
+            var response = new Product.Common.Models.GenericCustomFieldResponse();
             response = await _customFieldModel.Update(id, request, trackingGuid);
 
             return response;

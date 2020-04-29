@@ -6,12 +6,12 @@ using Sheev.Common.Logger;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     /// <summary>
     /// Hello
@@ -101,14 +101,14 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpGet("Product/{id}")]
         [AuthorizeClaim("Product", K2SO.Auth.Constants.PermissionAccessType.VIEW)]
-        public async Task<Tagge.Common.Models.ProductResponse> Get(string id, [FromQuery] Guid? trackingGuid = null)
+        public async Task<Product.Common.Models.ProductResponse> Get(string id, [FromQuery] Guid? trackingGuid = null)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(trackingGuid, _context);
 
             long longId = Utilities.RestErrorHandler.CheckId(id, _context, (Guid)trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductResponse();
+            var response = new Product.Common.Models.ProductResponse();
 
             response = await _productModel.GetProductById(longId, (Guid)trackingGuid);
 
@@ -130,7 +130,7 @@ namespace Tagge.Controllers
         [HttpPost("Product")]
         [AuthorizeClaim("Product", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.ProductResponse> Post([FromBody]Tagge.Common.Models.ProductRequest request)
+        public async Task<Product.Common.Models.ProductResponse> Post([FromBody]Product.Common.Models.ProductRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -142,7 +142,7 @@ namespace Tagge.Controllers
 
             Utilities.RestErrorHandler.CheckProductRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductResponse();
+            var response = new Product.Common.Models.ProductResponse();
 
             response = await _productModel.Save(request, trackingGuid);
 
@@ -160,7 +160,7 @@ namespace Tagge.Controllers
         /// <returns>DockingBay94.Models.BulkResponse</returns>
         //[HttpPost("Products")]
         //[AuthorizeClaim("Role", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
-        //public async Task<Sheev.Common.Models.BulkResponse> PostBulkProducts(List<Tagge.Common.Models.ProductRequest> request)
+        //public async Task<Sheev.Common.Models.BulkResponse> PostBulkProducts(List<Product.Common.Models.ProductRequest> request)
         //{
         //    //////***************************************************************
         //    //////create a list of products to be use in the testing. Need to change to Cavalier company to get products
@@ -184,7 +184,7 @@ namespace Tagge.Controllers
         //    //////**********************************************************
 
         //    var bulkResponse = new Sheev.Common.Models.BulkResponse();
-        //    var productResponse = new Tagge.Common.Models.ProductResponse();
+        //    var productResponse = new Product.Common.Models.ProductResponse();
         //    var mainMessage = string.Empty;
         //    var statusOperation = string.Empty;
 
@@ -307,7 +307,7 @@ namespace Tagge.Controllers
         [HttpPut("Product/{id}")]
         [AuthorizeClaim("Product", K2SO.Auth.Constants.PermissionAccessType.EDIT)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.ProductResponse> Put(string id, [FromBody]Tagge.Common.Models.ProductRequest request)
+        public async Task<Product.Common.Models.ProductResponse> Put(string id, [FromBody]Product.Common.Models.ProductRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -321,7 +321,7 @@ namespace Tagge.Controllers
             long longId = Utilities.RestErrorHandler.CheckId(id, _context, trackingGuid);
             Utilities.RestErrorHandler.CheckProductRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductResponse();
+            var response = new Product.Common.Models.ProductResponse();
 
             response = await _productModel.Update(longId, request, trackingGuid);
 

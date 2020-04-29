@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Sheev.Common.Logger;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     [Route("v2/Catalog")]
     [ApiController]
@@ -41,12 +41,12 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpGet("Variant/AlternateId/{id}")]
         [AuthorizeClaim("Product Variant Alternate Id", K2SO.Auth.Constants.PermissionAccessType.VIEW)]
-        public async Task<Tagge.Common.Models.ProductAlternateIdResponse> GetProductVariantAltId(string id, [FromQuery] Guid? trackingGuid = null)
+        public async Task<Product.Common.Models.ProductAlternateIdResponse> GetProductVariantAltId(string id, [FromQuery] Guid? trackingGuid = null)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(trackingGuid, _context);
 
-            var response = new Tagge.Common.Models.ProductAlternateIdResponse();
+            var response = new Product.Common.Models.ProductAlternateIdResponse();
             response = await _alternativeIdModel.GetById(_context, id, "PC_ProductVariant", (Guid)trackingGuid);
 
             return response;
@@ -61,7 +61,7 @@ namespace Tagge.Controllers
         [HttpPost("Variant/AlternateId")]
         [AuthorizeClaim("Product Variant Alternate Id", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.ProductAlternateIdResponse> PostProductVariantAltId([FromBody]Tagge.Common.Models.AlternateIdRequest request)
+        public async Task<Product.Common.Models.ProductAlternateIdResponse> PostProductVariantAltId([FromBody]Product.Common.Models.AlternateIdRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -73,7 +73,7 @@ namespace Tagge.Controllers
 
             Utilities.RestErrorHandler.CheckAlternateIdRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductAlternateIdResponse();
+            var response = new Product.Common.Models.ProductAlternateIdResponse();
             response = await _alternativeIdModel.SaveVariant(_context, request, trackingGuid);
 
             return response;
@@ -90,7 +90,7 @@ namespace Tagge.Controllers
         [HttpPut("Variant/AlternateId/{id}")]
         [AuthorizeClaim("Product Variant Alternate Id", K2SO.Auth.Constants.PermissionAccessType.EDIT)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.ProductAlternateIdResponse> PutProductVariantAltId(string id, [FromBody]Tagge.Common.Models.AlternateIdRequest request)
+        public async Task<Product.Common.Models.ProductAlternateIdResponse> PutProductVariantAltId(string id, [FromBody]Product.Common.Models.AlternateIdRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -102,7 +102,7 @@ namespace Tagge.Controllers
 
             Utilities.RestErrorHandler.CheckAlternateIdRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.ProductAlternateIdResponse();
+            var response = new Product.Common.Models.ProductAlternateIdResponse();
             response = await _alternativeIdModel.UpdateVariant(_context, id, request, trackingGuid);
 
             return response;

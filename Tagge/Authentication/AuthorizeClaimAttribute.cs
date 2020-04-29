@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
-namespace Tagge.Authentication
+namespace Product.Authentication
 {
     /// <summary>
     /// This houses the Authorize Claim Attribute Model!

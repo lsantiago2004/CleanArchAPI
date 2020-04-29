@@ -8,13 +8,13 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Sheev.Common.BaseModels;
 using Sheev.Common.Logger;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Utilities;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Utilities;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     [Route("v2/Catalog")]
     [ApiController]
@@ -42,7 +42,7 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpGet("Kit/{id}")]
         [AuthorizeClaim("Product Kit", K2SO.Auth.Constants.PermissionAccessType.VIEW)]
-        public async Task<Tagge.Common.Models.KitResponse> GetKit(string id, [FromQuery] Guid? trackingGuid = null)
+        public async Task<Product.Common.Models.KitResponse> GetKit(string id, [FromQuery] Guid? trackingGuid = null)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(trackingGuid, _context);
@@ -53,7 +53,7 @@ namespace Tagge.Controllers
                 throw new HttpResponseException() { StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest, ReasonPhrase = "Id is null or empty" };
             }
 
-            var response = new Tagge.Common.Models.KitResponse();
+            var response = new Product.Common.Models.KitResponse();
             response = await _kitModel.GetById(id, (Guid)trackingGuid);
 
             return response;
@@ -68,7 +68,7 @@ namespace Tagge.Controllers
         [HttpPost("Kit")]
         [AuthorizeClaim("Product Kit", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.KitResponse> PostKit([FromBody]Tagge.Common.Models.KitRequest request)
+        public async Task<Product.Common.Models.KitResponse> PostKit([FromBody]Product.Common.Models.KitRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -80,7 +80,7 @@ namespace Tagge.Controllers
 
             //Utilities.RestErrorHandler.CheckKitRequest(request, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.KitResponse();
+            var response = new Product.Common.Models.KitResponse();
             response = await _kitModel.Save(request, trackingGuid);
 
             return response;
@@ -97,7 +97,7 @@ namespace Tagge.Controllers
         [HttpPut("Kit/{id}")]
         [AuthorizeClaim("Product Kit", K2SO.Auth.Constants.PermissionAccessType.EDIT)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.KitResponse> PutKit(string id, [FromBody]Tagge.Common.Models.KitRequest request)
+        public async Task<Product.Common.Models.KitResponse> PutKit(string id, [FromBody]Product.Common.Models.KitRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -109,7 +109,7 @@ namespace Tagge.Controllers
 
             //long longId = Utilities.RestErrorHandler.CheckId(id, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.KitResponse();
+            var response = new Product.Common.Models.KitResponse();
             response = await _kitModel.Update(id, request, trackingGuid);
 
             return response;

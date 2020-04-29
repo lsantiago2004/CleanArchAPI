@@ -5,12 +5,12 @@ using Sheev.Common.Logger;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tagge.Authentication;
-using Tagge.Filters;
-using Tagge.Models;
-using Tagge.Models.Interfaces;
+using Product.Authentication;
+using Product.Filters;
+using Product.Models;
+using Product.Models.Interfaces;
 
-namespace Tagge.Controllers
+namespace Product.Controllers
 {
     [Route("v2/Catalog")]
     [ApiController]
@@ -95,14 +95,14 @@ namespace Tagge.Controllers
         /// <returns></returns>
         [HttpGet("Location/{id}")]
         [AuthorizeClaim("Location", K2SO.Auth.Constants.PermissionAccessType.VIEW)]
-        public async Task<Tagge.Common.Models.LocationResponse> GetLocation(string id, [FromQuery] Guid? trackingGuid = null)
+        public async Task<Product.Common.Models.LocationResponse> GetLocation(string id, [FromQuery] Guid? trackingGuid = null)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(trackingGuid, _context);
 
             long longId = Utilities.RestErrorHandler.CheckId(id, _context, (Guid)trackingGuid);
 
-            var response = new Tagge.Common.Models.LocationResponse();
+            var response = new Product.Common.Models.LocationResponse();
             
             response = await _locationModel.GetById(longId, (Guid)trackingGuid);
 
@@ -122,7 +122,7 @@ namespace Tagge.Controllers
         [HttpPost("Location")]
         [AuthorizeClaim("Location", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.LocationResponse> PostLocation(Tagge.Common.Models.LocationRequest request)
+        public async Task<Product.Common.Models.LocationResponse> PostLocation(Product.Common.Models.LocationRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
 
@@ -133,7 +133,7 @@ namespace Tagge.Controllers
             else
                 trackingGuid = IG2000.Data.Utilities.Logging.CreateLogTrackingHeader(null, _context, request.TrackingGuid);
 
-            var response = new Tagge.Common.Models.LocationResponse();
+            var response = new Product.Common.Models.LocationResponse();
 
             response = await _locationModel.Save(request,  trackingGuid);
 
@@ -154,7 +154,7 @@ namespace Tagge.Controllers
         [HttpPut("Location/{id}")]
         [AuthorizeClaim("Location", K2SO.Auth.Constants.PermissionAccessType.CREATE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<Tagge.Common.Models.LocationResponse> PutLocation(string id, Tagge.Common.Models.LocationRequest request)
+        public async Task<Product.Common.Models.LocationResponse> PutLocation(string id, Product.Common.Models.LocationRequest request)
         {
             _context.Security = new K2SO.Auth.Security(HttpContext.Request.Headers["Authorization"]);
             Guid trackingGuid = Guid.NewGuid();
@@ -166,7 +166,7 @@ namespace Tagge.Controllers
             
             long longId = Utilities.RestErrorHandler.CheckId(id, _context, trackingGuid);
 
-            var response = new Tagge.Common.Models.LocationResponse();
+            var response = new Product.Common.Models.LocationResponse();
 
             response = await _locationModel.Update(longId, request, trackingGuid);
 
